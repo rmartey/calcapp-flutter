@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, use_key_in_widget_constructors, unnecessary_string_interpolations
+// ignore_for_file: prefer_const_constructors, avoid_unnecessary_containers, use_key_in_widget_constructors, unnecessary_string_interpolations, prefer_final_fields, unused_field
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +15,59 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  String output = "0";
+  String _output = "0";
+
+  double num1 = 0.0;
+  double num2 = 0.0;
+
+  String operand = "";
+
+  operation(String btnText) {
+    if (btnText == "c") {
+      _output = "0";
+      num1 = 0.0;
+      num2 = 0.0;
+      operand = "";
+    } else if (btnText == "+" ||
+        btnText == "-" ||
+        btnText == "x" ||
+        btnText == "/") {
+      num1 = double.parse(output);
+      operand = btnText;
+      _output = "0";
+    } else if (btnText == "=") {
+      num2 = double.parse(output);
+      if (operand == "+") {
+        _output = (num1 + num2).toString();
+      }
+      if (operand == "-") {
+        _output = (num1 - num2).toString();
+      }
+      if (operand == "x") {
+        _output = (num1 * num2).toString();
+      }
+      if (operand == "/") {
+        _output = (num1 / num2).toString();
+      }
+      num1 = 0.0;
+      num2 = 0.0;
+      operand = "";
+    } else {
+      _output = _output + btnText;
+    }
+
+    setState(() {
+      output = double.parse(_output).toStringAsFixed(2);
+    });
+  }
+
   Widget button(String btnText) {
     return Expanded(
       child: RawMaterialButton(
-        onPressed: () {},
+        onPressed: () {
+          operation(btnText);
+        },
         child: Text(
           "$btnText",
           style: TextStyle(
@@ -57,8 +106,8 @@ class _MyAppState extends State<MyApp> {
                   padding: EdgeInsets.all(20),
                   margin: EdgeInsets.only(bottom: 8),
                   child: Text(
-                    "OUTPUT",
-                    style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
+                    "$output",
+                    style: TextStyle(fontSize: 50, fontWeight: FontWeight.w700),
                   ),
                 ),
               ),
